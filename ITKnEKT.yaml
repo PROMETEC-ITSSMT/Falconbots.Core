@@ -3,16 +3,16 @@ info:
   description: 'OpenAPI Specification for the Apigee mock target service endpoint.'
   version: 1.0.0
   title: Mock Target API
-host: httpbin.org
-schemes:
-  - http
-  - https
+# host: httpbin.org
+# schemes:
+#   - http
+#   - https
 securityDefinitions:
   basicAuth:
     type: basic
     description: HTTP Basic Authentication.
 paths:
-  /:
+  /get:
     get:
       summary: View personalized greeting
       operationId: View a personalized greeting
@@ -28,7 +28,7 @@ paths:
       responses:
         '200':
           description: Success
-  /get:
+  /help:
     get:
       summary: Get help
       operationId: Get help
@@ -156,3 +156,9 @@ definitions:
       replace-me:
         type: object
         description: 'Replace with request payload in application/json, application/x-www-form-urlencoded, or application/xml format.'
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /Elektra94/OpenAPIITKnEKT/1.0.0
+schemes:
+ - https
+ - http

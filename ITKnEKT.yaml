@@ -28,3 +28,9 @@ paths:
       responses:
         '200':
           description: Success
+definitions:
+  request-body:
+    properties:
+      replace-me:
+        type: object
+        description: 'Replace with request payload in application/json, application/x-www-form-urlencoded, or application/xml format.'

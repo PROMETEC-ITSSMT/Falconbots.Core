@@ -1,0 +1,30 @@
+swagger: '2.0'
+info:
+  description: 'OpenAPI Specification for the Apigee mock target service endpoint.'
+  version: 1.0.0
+  title: Mock Target API
+host: https://httpbin.org/get
+schemes:
+  - http
+  - https
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication.
+paths:
+  /:
+    get:
+      summary: View personalized greeting
+      operationId: View a personalized greeting
+      description: View a personalized greeting for the specified or guest user.
+      produces:
+        - text/plain
+      parameters:
+        - name: user
+          in: query
+          description: Your user name.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success

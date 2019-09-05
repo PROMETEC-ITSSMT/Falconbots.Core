@@ -3,7 +3,7 @@ info:
   description: 'OpenAPI Specification for the Apigee mock target service endpoint.'
   version: 1.0.0
   title: Mock Target API
-host: httpbin.org/get
+host: httpbin.org
 schemes:
   - http
   - https
@@ -28,7 +28,7 @@ paths:
       responses:
         '200':
           description: Success
-  /help:
+  /get:
     get:
       summary: Get help
       operationId: Get help

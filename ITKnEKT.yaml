@@ -19,12 +19,6 @@ paths:
       description: View a personalized greeting for the specified or guest user.
       produces:
         - text/plain
-      parameters:
-        - name: user
-          in: query
-          description: Your user name.
-          required: false
-          type: string
       responses:
         '200':
           description: Success

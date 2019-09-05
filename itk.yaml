@@ -1,0 +1,854 @@
+swagger: '2.0'
+
+
+info:
+  version: "0.0.1"
+  title: API Créditos
+  description: |
+    API para las operaciones relacionadas a credito
+
+host:
+    internal-APIGEE-DEV-ALB01-616642448.us-east-1.elb.amazonaws.com:8080
+
+basePath: /elektra/creditos/v1
+
+schemes:
+  - https
+
+produces:
+  - application/json  
+
+securityDefinitions:
+  Bearer:
+    description: >
+      Para acceder a la API se debe pasar un token válido en todas las consultas.
+      La siguiente sintaxis se debe utilizar en el encabezado 'Authorization' :
+        Bearer: 2zzLJmBAtTNIU8nF8e8XbmDvaNGs
+    type: apiKey
+    name: Authorization
+    in: header
+
+security:
+  - Bearer: []
+
+paths:
+
+  /solicitudes:
+    get:
+      description: Consultar las solicitudes de crédito
+      tags:
+        - Proceso solicitud de crédito
+      produces:
+        - application/json
+          
+      responses:
+      
+        200:
+          description: Ok
+          schema:
+            $ref: '#/definitions/respuestaObtenerSolicitudes'
+          examples:
+            application/json: |-
+              {
+                "mensaje": "Operación Exitosa.",
+                "folio": "22920190128140415938",
+                "resultado": {
+                  "solicitudes": [
+                    {
+                      "id": "20190128140400140401002147",
+                      "idEstatus": 5,
+                      "estatus": "En Investigación",
+                      "fechaCreacion": "2019-04-16 16:49:29.0",
+                      "cliente": {
+                        "nombre": "BERENICE",
+                        "apellidoPaterno": "RUBIN",
+                        "apellidoMaterno": "QUINTERO",
+                        "celular": 7353590205,
+                        "clienteUnico": {
+                          "idPais": 1,
+                          "idCanal": 1,
+                          "idSucursal": 100,
+                          "idFolio": 92761
+                        }
+                      }
+                    },
+                    {
+                      "id": "20190128140400140401002148",
+                      "idEstatus": 5,
+                      "estatus": "En Investigación",
+                      "fechaCreacion": "2019-04-16 16:49:29.0",
+                      "cliente": {
+                        "nombre": "PEDRO",
+                        "apellidoPaterno": "PEREZ",
+                        "apellidoMaterno": "PEREZ",
+                        "celular": 7353590205,
+                        "clienteUnico": {
+                          "idPais": 1,
+                          "idCanal": 1,
+                          "idSucursal": 100,
+                          "idFolio": 92762
+                        }
+                      }
+                    },
+                    {
+                      "id": "20190128140400140401002149",
+                      "idEstatus": 1,
+                      "estatus": "En Investigación",
+                      "fechaCreacion": "2019-04-16 16:49:29.0",
+                      "cliente": {
+                        "nombre": "JUAN",
+                        "apellidoPaterno": "ORTIZ",
+                        "apellidoMaterno": "JUAREZ",
+                        "celular": 7353590205,
+                        "clienteUnico": {
+                          "idPais": 1,
+                          "idCanal": 1,
+                          "idSucursal": 100,
+                          "idFolio": 92763
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+              
+        500:
+          description: Error interno de servidor
+          schema:
+           $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "500.Elektra-creditos.1003",
+                "mensaje": "Por el momento no podemos procesar tu solicitud.",
+                "folio": "22920181120162829642",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#500.Elektra-creditos.1003",
+                "detalles": [
+                  ""
+                ]
+              }
+
+      security:
+        - Bearer: []
+
+    post:
+      description: Crear solicitud de crédito 
+      tags:
+        - Proceso solicitud de crédito
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        
+      parameters:
+        - name: Parámetros de entrada
+          required: true
+          description: Datos necesarios de usuarios para su registro como clientes y generar una solicitud de crédito
+          in: body
+          schema:
+            $ref: '#/definitions/entradaCrearSolicitudes'
+            
+      responses:
+      
+        201:
+          description: Creado
+          schema:
+            $ref: '#/definitions/respuestaCrearSolicitudes'
+          examples:
+            application/json: |-
+              {
+                "mensaje": "Operación Exitosa.",
+                "folio": "22920190128185010287",
+                "resultado": {
+                  "idSolicitud": "20190128140400140401002147"
+                }
+              }
+        
+        400:
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "400.Elektra-creditos.1001",
+                "mensaje": "Datos de entrada incorrectos, por favor valide su información.",
+                "folio": "22920190128134317232",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#400.Elektra-creditos.1001",
+                "detalles": [
+                  "Atributo apellidoPaterno requerido"
+                ]
+              }
+            
+        500:
+          description: Error interno de servidor
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "500.Elektra-creditos.1003",
+                "mensaje": "Por el momento no podemos procesar tu solicitud.",
+                "folio": "22920181120162829642",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#500.Elektra-creditos.1003",
+                "detalles": [
+                  ""
+                ]
+              }
+      
+      security:
+        - Bearer: []  
+
+  /solicitudes/{idSolicitud}: 
+    get:
+      description: Consultar información referente a una solicitud de crédito
+      tags:
+        - Proceso solicitud de crédito
+      produces:
+        - application/json
+
+      parameters:
+        - in: path
+          name: idSolicitud
+          type: string
+          required: true
+          description: Identificador de solicitud de crédito
+          default: "20190128140400140401002147"
+          
+      responses:
+      
+        200:
+          description: Ok
+          schema:
+            $ref: '#/definitions/respuestaObtenerSolicitud'
+          examples:
+            application/json: |-
+              {
+                "mensaje": "Operación Exitosa.",
+                "folio": "22920190128140415938",
+                "resultado": {
+                  "solicitud": {
+                    "id": "20190128140400140401002147",
+                    "idEstatus": 5,
+                    "estatus": "En Investigación",
+                    "fechaCreacion": "2019-04-16 16:49:29.0",
+                    "cliente": {
+                      "nombre": "BERENICE",
+                      "apellidoPaterno": "RUBIN",
+                      "apellidoMaterno": "QUINTERO",
+                      "celular": 7353590205,
+                      "clienteUnico": {
+                        "idPais": 1,
+                        "idCanal": 1,
+                        "idSucursal": 100,
+                        "idFolio": 92761
+                      }
+                    }
+                  }
+                }
+              }
+              
+        400:
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "400.Elektra-creditos.1001",
+                "mensaje": "Datos de entrada incorrectos, por favor valide su información.",
+                "folio": "22920190128134317232",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#400.Elektra-creditos.1001",
+                "detalles": [
+                  "Atributo idSolicitud requerido"
+                ]
+              }
+        
+        404:
+          description: Recurso no encontrado
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "404.Elektra-creditos.1002",
+                "mensaje": "Recurso no encontrado, por favor valide su información.",
+                "folio": "22920190128134317233",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#404.Elektra-creditos.1002",
+                "detalles": [
+                  "No se obtuvo información relacionada al identificador de solicitud proporcionado"
+                ]
+              }
+                                        
+        500:
+          description: Error interno de servidor
+          schema:
+           $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "500.Elektra-creditos.1003",
+                "mensaje": "Por el momento no podemos procesar tu solicitud.",
+                "folio": "22920181120162829642",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#500.Elektra-creditos.1003",
+                "detalles": [
+                  ""
+                ]
+              }
+
+      security:
+        - Bearer: []
+
+    put:
+      description: Actualizar la solicitud de crédito
+      tags:
+        - Proceso solicitud de crédito
+      consumes:
+        - application/json
+      produces:
+        - application/json
+
+      parameters:
+        - in: path
+          name: idSolicitud
+          type: string
+          required: true
+          description: Identificador de solicitud de crédito
+          default: "20190128140400140401002147"        
+
+        - name: Parámetros de entrada
+          required: true
+          description: Datos necesarios para actualizar la solicitud de crédito
+          in: body
+          schema:
+            $ref: '#/definitions/entradaActualizarSolicitudes'
+          
+      responses:
+      
+        200:
+          description: Ok
+          schema:
+            $ref: '#/definitions/respuestaActualizarSolicitudes'
+          examples:
+            application/json: |-
+              {
+                "mensaje": "Operación Exitosa.",
+                "folio": "22920190128185010287"
+              }
+        
+        400:
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "400.Elektra-creditos.1002",
+                "mensaje": "Datos de entrada incorrectos, por favor valide su información.",
+                "folio": "22920190128134317233",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#400.Elektra-creditos.1002",
+                "detalles": [
+                ]
+              }
+
+        404:
+          description: Recurso no encontrado
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "404.Elektra-creditos.1002",
+                "mensaje": "Recurso no encontrado, por favor valide su información.",
+                "folio": "22920190128134317233",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#404.Elektra-creditos.1002",
+                "detalles": [
+                  "No se obtuvo información relacionada al identificador de solicitud proporcionado"
+                ]
+              }              
+            
+        500:
+          description: Error interno de servidor
+          schema:
+           $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "500.Elektra-creditos.1003",
+                "mensaje": "Por el momento no podemos procesar tu solicitud.",
+                "folio": "22920181120162829642",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#500.Elektra-creditos.1003",
+                "detalles": [
+                  ""
+                ]
+              }
+      
+      security:
+        - Bearer: [] 
+
+    delete:
+      description: Eliminar una solicitud de crédito
+      tags:
+        - Proceso solicitud de crédito
+      produces:
+        - application/json
+
+      parameters:
+        - in: path
+          name: idSolicitud
+          type: string
+          required: true
+          description: Identificador de solicitud de crédito
+          default: "20190128140400140401002147"        
+          
+      responses:
+      
+        200:
+          description: Ok
+          schema:
+            $ref: '#/definitions/respuestaEliminarSolicitudes'
+          examples:
+            application/json: |-
+              {
+                "mensaje": "Operación Exitosa.",
+                "folio": "22920190128185010287"
+              }
+        
+        400:
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "400.Elektra-creditos.1002",
+                "mensaje": "Datos de entrada incorrectos, por favor valide su información.",
+                "folio": "22920190128134317233",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#400.Elektra-creditos.1002",
+                "detalles": [
+                ]
+              }
+
+        404:
+          description: Recurso no encontrado
+          schema:
+            $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "404.Elektra-creditos.1002",
+                "mensaje": "Recurso no encontrado, por favor valide su información.",
+                "folio": "22920190128134317233",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#404.Elektra-creditos.1002",
+                "detalles": [
+                  "No se obtuvo información relacionada al identificador de solicitud proporcionado"
+                ]
+              }              
+            
+        500:
+          description: Error interno de servidor
+          schema:
+           $ref: '#/definitions/error'
+          examples:
+            application/json: |-
+              {
+                "codigo": "500.Elektra-creditos.1003",
+                "mensaje": "Por el momento no podemos procesar tu solicitud.",
+                "folio": "22920181120162829642",
+                "info": "https://baz-developer.bancoazteca.com.mx/errors#500.Elektra-creditos.1003",
+                "detalles": [
+                  ""
+                ]
+              }
+      
+      security:
+        - Bearer: []                 
+        
+definitions:
+
+  respuestaObtenerSolicitudes:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Descripción de la operación
+        example: "Operación Exitosa."
+      folio:
+        type: string
+        description: Folio de la operación
+        example: "22920190128140415938"
+      resultado:
+          $ref: '#/definitions/resultadoBusquedasSolicitudes'
+
+  resultadoBusquedasSolicitudes:
+    type: object
+    properties:
+      solicitudes:
+        $ref: '#/definitions/busquedasSolicitudes'           
+
+  busquedasSolicitudes:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Id Solicitud Cliente'
+          example: "20190128140400140401002147"
+        idEstatus:
+          type: integer
+          description: "id Estatus de la Solicitud"
+          example: 5
+        estatus:
+          type: string
+          description: "Estatus Solicitud"
+          example: "En Investigación"             
+        fechaCreacion:
+          type: string
+          description: 'fcpersonaId 20190416164929165698'
+          example: "2019-04-16 16:49:29.0"
+        cliente:
+          type: object
+          properties: 
+            nombre:
+              type: string
+              description: "nombre"
+              example: "BERENICE"
+            apellidoPaterno:
+              type: string
+              description: "apellido Paterno"
+              example: "RUBIN"
+            apellidoMaterno:
+              type: string
+              description: "apellido Materno"
+              example: "QUINTERO"
+            celular:
+              type: integer
+              description: celular
+              example: 7353590205              
+            clienteUnico:
+              type: object
+              properties:
+                idPais:
+                  type: integer
+                  title: idPais
+                  description: 'Id del país asociado a la sucursal '
+                  format: int32
+                  example: 1
+                idCanal:
+                  type: integer
+                  description: 'Id del canal  asociado a la sucursal '
+                  format: int32
+                  example: 1
+                idSucursal:
+                  type: integer
+                  description: 'Id del sucursal de consulta'
+                  format: int32
+                  example: 100
+                idFolio:
+                  type: integer
+                  description: 'Id del Folio de consulta'
+                  format: int32
+                  example: 92761          
+
+  entradaCrearSolicitudes:
+    type: object
+    properties:
+      solicitud:
+        $ref: '#/definitions/crearSolicitud'
+
+  crearSolicitud:
+    type: object
+    properties:
+      idProducto:
+        type: string
+        description: 'Identificador de producto'
+        example: "ELEKTRA"
+      cliente: 
+        $ref: '#/definitions/crearSolicitudCliente'
+        
+  crearSolicitudCliente:
+    type: object
+    properties: 
+      idNacionalidad:
+        type: integer
+        description: Identificador de la nacionalidad del cliente
+        example: 1
+      idLugarNacimiento:
+        type: integer
+        description: Identificador del lugar de nacimiento del cliente
+        example: 1
+      idEstadoCivil:
+        type: integer
+        description: Identificador del estaado civil del cliente
+        example: 1
+      idOcupacion:
+        type: integer
+        description: Identificador de la ocupación del cliente
+        example: 1
+      nombre:
+        type: string
+        description: "nombre"
+        example: "BERENICE"
+      apellidoPaterno:
+        type: string
+        description: Apellido Paterno del cliente
+        example: Galicia
+      apellidoMaterno:
+        type: string
+        description: Apellido Materno del cliente
+        example: Guzman
+      fechaNacimiento:
+        type: string
+        description: Fecha de nacimiento del cliente
+        example: 10/03/1993
+      contacto: 
+        $ref: '#/definitions/crearSolicitudContacto'
+      domicilio: 
+        $ref: '#/definitions/crearSolicitudDomicilio'
+
+  crearSolicitudContacto:
+    type: object
+    properties:    
+      celular:
+        type: string
+        description: Numero de celular del cliente
+        example: 5583727308
+      correo:
+        type: string
+        description: Correo electrónico personal del cliente
+        example: tomasyussef@gmail.com
+
+  crearSolicitudDomicilio:
+    type: object
+    properties:        
+      idEstado:
+        type: integer
+        description: Identificador de la entidad feederativa de origen del cliente
+        example: 1
+      idDelegacion:
+        type: integer
+        description: Identificador de la delegación donde reside el cliente
+        example: 1
+      codigoPostal:
+        type: string
+        description: Codigo postal del cliente
+        example: "14000"
+      colonia:
+        type: string
+        description: Colonia donde reside el cliente
+        example: Acoxpa
+      calle:
+        type: string
+        description: Calle donde se encuentra la vivienda del cliente
+        example: Acequia
+      numero:
+        type: string
+        description: Numero del domicilio del cliente
+        example: 10
+
+  respuestaCrearSolicitudes:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Descripción de la operación
+        example: "Operación Exitosa."
+      folio:
+        type: string
+        description: Folio de la operación
+        example: "22920190128140415938"
+      resultado:
+          $ref: '#/definitions/resultadoCrearSolicitudes'
+
+  resultadoCrearSolicitudes:
+    type: object
+    properties:
+      idSolicitud:
+        description: Identificador de solicitud
+        type: string
+        example: "20190128140400140401002147"
+
+  respuestaObtenerSolicitud:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Descripción de la operación
+        example: "Operación Exitosa."
+      folio:
+        type: string
+        description: Folio de la operación
+        example: "22920190128140415938"
+      resultado:
+          $ref: '#/definitions/resultadoObtenerSolicitud'
+
+  resultadoObtenerSolicitud:
+    type: object
+    properties:
+      solicitudes:
+        $ref: '#/definitions/obtenerSolicitud'
+
+  obtenerSolicitud:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'Id Solicitud Cliente'
+        example: "20190128140400140401002147"
+      idEstatus:
+        type: integer
+        description: "Id Estatus de la Solicitud"
+        example: 5
+      estatus:
+        type: string
+        description: "Estatus Solicitud"
+        example: "En Investigación"             
+      fechaCreacion:
+        type: string
+        description: 'fcpersonaId 20190416164929165698'
+        example: "2019-04-16 16:49:29.0"
+      cliente:
+        type: object
+        properties: 
+          nombre:
+            type: string
+            description: "nombre"
+            example: "BERENICE"
+          apellidoPaterno:
+            type: string
+            description: "apellido Paterno"
+            example: "RUBIN"
+          apellidoMaterno:
+            type: string
+            description: "apellido Materno"
+            example: "QUINTERO"
+          celular:
+            type: integer
+            description: celular
+            example: 7353590205              
+          clienteUnico:
+            type: object
+            properties:
+              idPais:
+                type: integer
+                title: idPais
+                description: 'Id del país asociado a la sucursal '
+                format: int32
+                example: 1
+              idCanal:
+                type: integer
+                description: 'Id del canal  asociado a la sucursal '
+                format: int32
+                example: 1
+              idSucursal:
+                type: integer
+                description: 'Id del sucursal de consulta'
+                format: int32
+                example: 100
+              idFolio:
+                type: integer
+                description: 'Id del Folio de consulta'
+                format: int32
+                example: 92761
+
+  entradaActualizarSolicitudes:
+    type: object
+    properties:
+      solicitud:
+        $ref: '#/definitions/actualizarSolicitud'
+
+  actualizarSolicitud:
+    type: object
+    properties:
+      idEstatus:
+        type: integer
+        description: "Id Estatus de la Solicitud"
+        example: 5
+          
+  respuestaActualizarSolicitudes:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Descripción de la operación
+        example: "Operación Exitosa."
+      folio:
+        type: string
+        description: Folio de la operación
+        example: "22920190128185010287"                
+
+  respuestaEliminarSolicitudes:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Descripción de la operación
+        example: "Operación Exitosa."
+      folio:
+        type: string
+        description: Folio de la operación
+        example: "22920190128185010287"  
+
+
+
+  error:
+    type: object
+    properties:
+      codigo:
+        type: string
+        description: Código del error
+        example: "400.Elektra-creditos.1001"
+      mensaje:
+        type: string
+        description: Descripción del error
+        example: "Datos de entrada incorrectos, por favor valide su información."
+      folio: 
+        type: string
+        description: Número de folio de la operación
+        example: "22920190128134317232"
+      info:
+        type: string
+        description: Rutas de ayuda para atender el error
+        example: "https://baz-developer.bancoazteca.com.mx/errors#400.Elektra-creditos.1001"
+      detalles:
+        type: array
+        items:
+          type: string
+          example: ""     
+  
+  summary:
+    type: object
+    properties: 
+      api-name:
+        type: string
+        description: API Créditos
+        example: ekt-creditos-v1
+      solicitudes-post:
+        type: object
+        properties:
+          displayName: 
+            type: string
+            description: Registro de solicitud de crédito
+            example: Solicitud de crédito
+      solicitudes-put:
+        type: object
+        properties:
+          displayName: 
+            type: string
+            description: Actualizacion de datos de la solicitud de crédito
+            example: Actualizar la solicitud de crédito
+      solicitudes-idSolicitud-get:
+        type: object
+        properties:
+          displayName: 
+            type: string
+            description: Consultar información referente a una solicitud de crédito
+            example: Consultar de una solicitud de crédito
+      solicitudes-busquedas-post:
+        type: object
+        properties:
+          displayName: 
+            type: string
+            description: Realiza la búsqueda de solicitudes de credito por nombre y fecha
+            example: Búsqueda de solicitudes
